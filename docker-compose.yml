@@ -1,0 +1,19 @@
+services:
+  test:
+    container_name: test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app_src
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    env_file:
+      .env
+    ports:
+      - ${APP_PORT}
+
+volumes:
+  postgres_data:
