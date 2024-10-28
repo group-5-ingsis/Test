@@ -9,6 +9,6 @@ FROM amazoncorretto:21-alpine
 
 RUN mkdir /app
 
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/snippet.jar
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/test.jar
 
 ENTRYPOINT ["java", "-jar", "/app/test.jar"]
