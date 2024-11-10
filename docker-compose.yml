@@ -1,6 +1,6 @@
 services:
   test:
-    container_name: test
+    container_name: "test"
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,13 +10,15 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    depends_on:
+      - test-postgres-db
     env_file:
       .env
     ports:
       - ${APP_PORT}
 
   test-postgres-db:
-    container_name: test-db
+    container_name: "test-db"
     image: postgres:latest
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -29,5 +31,35 @@ services:
     ports:
       - ${DB_PORT}
 
+  asset-service:
+    container_name: "asset_service"
+    image: ghcr.io/austral-ingsis/snippet-asset-service:latest
+    ports:
+      - "8080:8080"
+    environment:
+      AZURE_HOST: "http://azurite"
+      NEW_RELIC_APP_NAME: "asset-service"
+      NEW_RELIC_AGENT_ENABLED: false
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: "azurite"
+    hostname: azurite
+    restart: always
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    volumes:
+      - blob:/workspace
+
+  redis:
+    container_name: "event-bus"
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+
 volumes:
   postgres_data:
+  blob:
+    external: false
