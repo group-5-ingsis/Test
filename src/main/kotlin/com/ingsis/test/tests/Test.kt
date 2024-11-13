@@ -18,6 +18,9 @@ data class Test(
   @Column(name = "snippetId")
   var snippetId: String,
 
+  @Column(name = "author")
+  var author: String,
+
   @Column(name = "name")
   var name: String,
 
@@ -41,6 +44,7 @@ data class Test(
   constructor() : this(
     id = UUID.randomUUID().toString(),
     snippetId = "",
+    author =  "",
     name = "",
     userInputs = mutableListOf(),
     userOutputs = mutableListOf(),
@@ -52,6 +56,7 @@ data class Test(
   constructor(createTestDto: CreateTestDto) : this(
     id = UUID.randomUUID().toString(),
     snippetId = createTestDto.snippetId,
+    author = createTestDto.author,
     name = createTestDto.name,
     userInputs = createTestDto.userInputs,
     userOutputs = createTestDto.userOutputs,

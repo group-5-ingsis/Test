@@ -22,6 +22,8 @@ class TestRequestConsumer @Autowired constructor(
   override fun onMessage(record: ObjectRecord<String, String>) {
     val streamValue = record.value
     val test = JsonUtils.deserializeTestRequest(streamValue)
+    val snippetContent = assetService.getAssetContent(test.author, test.snippetId)
+    
 
   }
 
