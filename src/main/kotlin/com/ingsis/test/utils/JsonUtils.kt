@@ -14,4 +14,12 @@ object JsonUtils {
       throw RuntimeException("Failed to serialize object to JSON", e)
     }
   }
+
+  fun deserializeTestRequest(json: String): Test {
+    return try {
+      objectMapper.readValue(json, Test::class.java)
+    } catch (e: JsonProcessingException) {
+      throw RuntimeException("Failed to deserialize JSON to object", e)
+    }
+  }
 }
