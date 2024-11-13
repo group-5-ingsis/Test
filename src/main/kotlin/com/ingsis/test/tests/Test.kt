@@ -18,6 +18,9 @@ data class Test(
   @Column(name = "snippetId")
   var snippetId: String,
 
+  @Column(name = "name")
+  var name: String,
+
   @Column(name = "userInputs")
   @ElementCollection
   var userInputs: List<String>,
@@ -26,22 +29,34 @@ data class Test(
   @ElementCollection
   var userOutputs: List<String>,
 
+  @Column(name = "language")
+  var language: String,
+
+  @Column(name = "version")
+  var version: String,
+
   @Column(name = "testPassed")
   var testPassed: Boolean,
 ) {
   constructor() : this(
     id = UUID.randomUUID().toString(),
     snippetId = "",
+    name = "",
     userInputs = mutableListOf(),
     userOutputs = mutableListOf(),
+    language = "",
+    version = "",
     testPassed = false
   )
 
   constructor(createTestDto: CreateTestDto) : this(
     id = UUID.randomUUID().toString(),
     snippetId = createTestDto.snippetId,
+    name = createTestDto.name,
     userInputs = createTestDto.userInputs,
     userOutputs = createTestDto.userOutputs,
+    language = createTestDto.language,
+    version = createTestDto.version,
     testPassed = createTestDto.testPassed
   )
 }

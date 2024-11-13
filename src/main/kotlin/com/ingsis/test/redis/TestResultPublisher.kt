@@ -1,5 +1,7 @@
 package com.ingsis.test.redis
 
+import com.ingsis.test.tests.Test
+import com.ingsis.test.utils.JsonUtils
 import kotlinx.coroutines.reactor.awaitSingle
 import org.austral.ingsis.redis.RedisStreamProducer
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +15,8 @@ class TestResultPublisher @Autowired constructor(
   redis: ReactiveRedisTemplate<String, String>
 ) : RedisStreamProducer(streamKey, redis) {
 
-  suspend fun publishTestResult(testId: String) {
-    emit("Test with ID $testId completed").awaitSingle()
+  suspend fun publishTestResult(test: Test) {
+    val testAsJson = JsonUtils.serializeToJson(test)
+    emit("Test with ID ${test.id} completed").awaitSingle()
   }
 }
