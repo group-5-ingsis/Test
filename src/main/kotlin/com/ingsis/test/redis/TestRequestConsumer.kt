@@ -1,7 +1,6 @@
 package com.ingsis.test.redis
 
 import com.ingsis.test.asset.AssetService
-import com.ingsis.test.tests.Test
 import com.ingsis.test.utils.JsonUtils
 import org.austral.ingsis.redis.RedisStreamConsumer
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +22,8 @@ class TestRequestConsumer @Autowired constructor(
     val streamValue = record.value
     val test = JsonUtils.deserializeTestRequest(streamValue)
     val snippetContent = assetService.getAssetContent(test.author, test.snippetId)
-    
+    // get interpreter for language
+
 
   }
 
@@ -68,12 +68,6 @@ class FormatRequestConsumer @Autowired constructor(
     )
 
     assetService.updateAsset(asset)
-  }
-
-  override fun options(): StreamReceiver.StreamReceiverOptions<String, ObjectRecord<String, String>> {
-    return StreamReceiver.StreamReceiverOptions.builder()
-      .targetType(String::class.java)
-      .build()
   }
 }
 */
