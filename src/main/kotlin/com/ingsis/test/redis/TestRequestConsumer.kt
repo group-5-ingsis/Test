@@ -1,6 +1,7 @@
 package com.ingsis.test.redis
 
 import com.ingsis.test.asset.AssetService
+import com.ingsis.test.languages.LanguageProvider
 import com.ingsis.test.utils.JsonUtils
 import org.austral.ingsis.redis.RedisStreamConsumer
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,9 +23,14 @@ class TestRequestConsumer @Autowired constructor(
     val streamValue = record.value
     val test = JsonUtils.deserializeTestRequest(streamValue)
     val snippetContent = assetService.getAssetContent(test.author, test.snippetId)
-    // get interpreter for language
-
-
+    val language = LanguageProvider.getLanguages()[test.language]
+    if (language != null) {
+      // TODO: How to integrate the user inputs?
+      val executionResult = language.execute(snippetContent, test.version)
+      TODO("Compare the execution result with the expected output")
+    } else {
+      TODO("Error handling")
+    }
   }
 
   override fun options(): StreamReceiver.StreamReceiverOptions<String, ObjectRecord<String, String>> {
@@ -33,41 +39,3 @@ class TestRequestConsumer @Autowired constructor(
       .build()
   }
 }
-
-/*package com.ingsis.parse.async.format
-@Component
-class FormatRequestConsumer @Autowired constructor(
-  redis: ReactiveRedisTemplate<String, String>,
-  @Value("\${stream.format}") streamKey: String,
-  @Value("\${groups.parser}") groupId: String,
-  private val assetService: AssetService
-) : RedisStreamConsumer<String>(streamKey, groupId, redis) {
-
-  override fun onMessage(record: ObjectRecord<String, String>) {
-    val streamValue = record.value
-
-    val snippet = JsonUtil.deserializeFormatRequest(streamValue)
-    val author = snippet.container
-    val snippetName = snippet.key
-    val snippetLanguage = snippet.language
-    val snippetVersion = snippet.version
-
-    val snippetContent = assetService.getAssetContent(author, snippetName)
-
-    // Las reglas van a estar en formato json
-    val formattingRules = assetService.getAssetContent(author, "FormattingRules")
-
-    val language = LanguageProvider.getLanguages()[snippetLanguage]
-
-    val result = language?.format(snippetContent, snippetVersion, formattingRules) ?: ""
-
-    val asset = Asset(
-      author,
-      snippetName,
-      content = result
-    )
-
-    assetService.updateAsset(asset)
-  }
-}
-*/
