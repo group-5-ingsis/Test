@@ -20,7 +20,7 @@ class TestController {
 
   @PostMapping("/{snippetId}/run")
   fun runTest(@PathVariable snippetId: String): Boolean {
-    return testService.runTest(snippetId)
+    return testService.runTestsForSnippet(snippetId)
   }
 
 }
