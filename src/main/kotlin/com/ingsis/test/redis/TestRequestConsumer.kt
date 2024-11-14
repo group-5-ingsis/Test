@@ -2,6 +2,7 @@ package com.ingsis.test.redis
 
 import com.ingsis.test.asset.AssetService
 import com.ingsis.test.languages.LanguageProvider
+import com.ingsis.test.tests.TestRepository
 import com.ingsis.test.utils.JsonUtils
 import org.austral.ingsis.redis.RedisStreamConsumer
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,22 +17,25 @@ class TestRequestConsumer @Autowired constructor(
   redis: ReactiveRedisTemplate<String, String>,
   @Value("\${stream.test}") streamKey: String,
   @Value("\${groups.test}") groupId: String,
-  private val assetService: AssetService
+  private val assetService: AssetService,
+  private val testRepository: TestRepository
 ) : RedisStreamConsumer<String>(streamKey, groupId, redis) {
 
   override fun onMessage(record: ObjectRecord<String, String>) {
     val streamValue = record.value
-    val test = JsonUtils.deserializeTestRequest(streamValue)
-    val snippetContent = assetService.getAssetContent(test.author, test.snippetId)
+    // id, author, snippetId
+    val testRequest = JsonUtils.deserializeTestRequest(streamValue)
+    val snippetContent = assetService.getAssetContent(testRequest.author, testRequest.snippetId)
+    val test = testRepository.findById(testRequest.id).get()
     val inputs = test.userInputs
     val outputs = test.userOutputs
     val language = LanguageProvider.getLanguages()[test.language]
     if (language != null) {
-      // TODO: How to integrate the user inputs?
       inputs.forEach { input ->
         val executionResult = language.execute(snippetContent, test.version, input)
         if (executionResult == outputs[inputs.indexOf(input)]) {
           test.testPassed = true
+          testRepository.save(test)
         }
       }
     } else {

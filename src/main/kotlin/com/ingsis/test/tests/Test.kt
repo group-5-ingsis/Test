@@ -13,7 +13,7 @@ import java.util.UUID
 data class Test(
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  var id: String = UUID.randomUUID().toString(),
+  var id: String,
 
   @Column(name = "snippetId")
   var snippetId: String,
