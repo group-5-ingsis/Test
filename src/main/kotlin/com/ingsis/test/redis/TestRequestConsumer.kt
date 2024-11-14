@@ -23,13 +23,19 @@ class TestRequestConsumer @Autowired constructor(
     val streamValue = record.value
     val test = JsonUtils.deserializeTestRequest(streamValue)
     val snippetContent = assetService.getAssetContent(test.author, test.snippetId)
+    val inputs = test.userInputs
+    val outputs = test.userOutputs
     val language = LanguageProvider.getLanguages()[test.language]
     if (language != null) {
       // TODO: How to integrate the user inputs?
-      val executionResult = language.execute(snippetContent, test.version)
-      TODO("Compare the execution result with the expected output")
+      inputs.forEach { input ->
+        val executionResult = language.execute(snippetContent, test.version, input)
+        if (executionResult == outputs[inputs.indexOf(input)]) {
+          test.testPassed = true
+        }
+      }
     } else {
-      TODO("Error handling")
+      throw Exception("Language not found")
     }
   }
 

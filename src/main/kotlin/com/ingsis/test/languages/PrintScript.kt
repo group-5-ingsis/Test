@@ -7,13 +7,13 @@ import java.io.IOException
 
 object PrintScript : Language {
 
-  override fun execute(src: String, version: String): String {
+  override fun execute(src: String, version: String, input: String): String {
     val output = StringBuilder()
     try {
       val tokens = Lexer(src, version)
       val asts = Parser(tokens, version, null)
       val interpreter = Interpreter
-      val result = interpreter.interpret(asts.next(), version, asts.getEnv(), null)
+      val result = interpreter.interpret(asts.next(), version, asts.getEnv(), input)
       output.append(result)
     } catch (e: IOException) {
       System.err.println("I/O Error: ${e.message}")
