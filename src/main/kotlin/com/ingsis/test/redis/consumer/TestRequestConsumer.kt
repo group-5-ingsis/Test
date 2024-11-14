@@ -1,9 +1,15 @@
-package com.ingsis.test.redis
+package com.ingsis.test.redis.consumer
 
 import com.ingsis.test.asset.AssetService
 import com.ingsis.test.languages.LanguageProvider
+import com.ingsis.test.redis.producer.TestResult
+import com.ingsis.test.redis.producer.TestResultProducer
 import com.ingsis.test.tests.TestRepository
 import com.ingsis.test.utils.JsonUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.austral.ingsis.redis.RedisStreamConsumer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -18,14 +24,23 @@ class TestRequestConsumer @Autowired constructor(
   @Value("\${stream.test}") streamKey: String,
   @Value("\${groups.test}") groupId: String,
   private val assetService: AssetService,
-  private val testRepository: TestRepository
+  private val testRepository: TestRepository,
+  private val testResultProducer: TestResultProducer,
 ) : RedisStreamConsumer<String>(streamKey, groupId, redis) {
 
   override fun onMessage(record: ObjectRecord<String, String>) {
+    CoroutineScope(Dispatchers.IO).launch {
+      processMessage(record)
+    }
+  }
+
+  private suspend fun processMessage(record: ObjectRecord<String, String>) {
     val streamValue = record.value
     val testRequest = JsonUtils.deserializeTestRequest(streamValue)
     val snippetContent = assetService.getAssetContent(testRequest.author, testRequest.snippetId)
-    val test = testRepository.findById(testRequest.id).get()
+    val test = withContext(Dispatchers.IO) {
+      testRepository.findById(testRequest.id)
+    }.get()
     val inputs = test.userInputs
     val outputs = test.userOutputs
     val language = LanguageProvider.getLanguages()[test.language]
@@ -34,8 +49,12 @@ class TestRequestConsumer @Autowired constructor(
         val executionResult = language.execute(snippetContent, test.version, input)
         if (executionResult == outputs[inputs.indexOf(input)]) {
           test.testPassed = true
-          testRepository.save(test)
+          testResultProducer.publishEvent(TestResult(test.id, true))
+        } else {
+          test.testPassed = false
+          testResultProducer.publishEvent(TestResult(test.id, false))
         }
+        testRepository.save(test)
       }
     } else {
       throw Exception("Language not found")

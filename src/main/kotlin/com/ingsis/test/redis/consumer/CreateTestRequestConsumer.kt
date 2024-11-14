@@ -1,9 +1,5 @@
-package com.ingsis.test.redis
+package com.ingsis.test.redis.consumer
 
-import com.ingsis.test.asset.Asset
-import com.ingsis.test.asset.AssetService
-import com.ingsis.test.dto.CreateTestDto
-import com.ingsis.test.tests.Test
 import com.ingsis.test.tests.TestRepository
 import com.ingsis.test.utils.JsonUtils
 import org.austral.ingsis.redis.RedisStreamConsumer
