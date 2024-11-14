@@ -28,6 +28,14 @@ repositories {
             password = System.getenv('TOKEN') ?: project.findProperty("gpr.key")
         }
     }
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/group-5-ingsis/PrintScript")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
+    }
 }
 
 dependencies {
@@ -48,6 +56,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
+    implementation 'org.austral.ingsis:redis-streams-flux:0.1.13'
+
+    implementation 'com.ingsis:lexer:1.1.0'
+    implementation 'com.ingsis:parser:1.1.0'
+    implementation 'com.ingsis:interpreter:1.1.0'
 
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
