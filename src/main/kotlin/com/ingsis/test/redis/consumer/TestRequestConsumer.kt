@@ -47,15 +47,16 @@ class TestRequestConsumer @Autowired constructor(
     if (language != null) {
       inputs.forEach { input ->
         val executionResult = language.execute(snippetContent, test.version, input)
-        if (executionResult == outputs[inputs.indexOf(input)]) {
-          test.testPassed = true
-          testResultProducer.publishEvent(TestResult(test.id, true))
-        } else {
+        if (executionResult != outputs[inputs.indexOf(input)]) {
           test.testPassed = false
           testResultProducer.publishEvent(TestResult(test.id, false))
         }
+      }
+      test.testPassed = true
+      withContext(Dispatchers.IO) {
         testRepository.save(test)
       }
+      testResultProducer.publishEvent(TestResult(test.id, true))
     } else {
       throw Exception("Language not found")
     }
