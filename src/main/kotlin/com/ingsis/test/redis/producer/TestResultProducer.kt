@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class TestResultProducer @Autowired constructor(
-  @Value("\${stream.test}") streamKey: String,
+  @Value("\${stream.test-result}") streamKey: String,
   redis: ReactiveRedisTemplate<String, String>
 ) : RedisStreamProducer(streamKey, redis) {
 

@@ -23,6 +23,7 @@ spring:
 stream:
   test: ${STREAM_KEY_TEST}
   test-create: ${STREAM_KEY_TEST_CREATE}
+  test-result: ${STREAM_KEY_TEST_RESULT}
 
 groups:
   test: ${GROUP_KEY_TEST}
