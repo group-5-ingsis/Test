@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 class TestRequestConsumer @Autowired constructor(
   redis: ReactiveRedisTemplate<String, String>,
   @Value("\${stream.test}") streamKey: String,
-  @Value("\${groups.interpreter}") groupId: String,
+  @Value("\${groups.test}") groupId: String,
   private val assetService: AssetService
 ) : RedisStreamConsumer<String>(streamKey, groupId, redis) {
 

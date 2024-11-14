@@ -2,6 +2,11 @@ spring:
   application:
     name: "Test Service"
 
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     driver-class-name: org.postgresql.Driver
@@ -18,6 +23,10 @@ spring:
 stream:
   test: ${STREAM_KEY_TEST}
   test-create: ${STREAM_KEY_TEST_CREATE}
+
+groups:
+  test: ${GROUP_KEY_TEST}
+  test-create: ${GROUP_KEY_TEST_CREATE}
 
 server:
   port: ${SERVER_PORT}
