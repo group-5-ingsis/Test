@@ -1,4 +1,4 @@
-package com.ingsis.test.redis.producer
+package com.ingsis.test.languages.runner
 
 data class TestResult(
   val testId: String,

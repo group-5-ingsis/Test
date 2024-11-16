@@ -1,5 +1,6 @@
 package com.ingsis.test.redis.producer
 
+import com.ingsis.test.languages.runner.TestResult
 import com.ingsis.test.utils.JsonUtils
 import kotlinx.coroutines.reactive.awaitSingle
 import org.austral.ingsis.redis.RedisStreamProducer

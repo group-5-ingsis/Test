@@ -2,7 +2,7 @@ package com.ingsis.test.utils
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.ingsis.test.redis.producer.TestResult
+import com.ingsis.test.languages.runner.TestResult
 import com.ingsis.test.tests.Test
 
 object JsonUtils {
