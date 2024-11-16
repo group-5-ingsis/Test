@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.web.bind.annotation.*
 
-@RestController("/test")
+@RestController("/service/test")
 class TestController(
   private val testRepository: TestRepository,
   private val testService: TestService) {

@@ -62,6 +62,6 @@ data class Test(
     userOutputs = createTestDto.userOutputs,
     language = createTestDto.language,
     version = createTestDto.version,
-    testPassed = createTestDto.testPassed
+    testPassed = false
   )
 }

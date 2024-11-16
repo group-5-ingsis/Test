@@ -8,5 +8,4 @@ data class CreateTestDto(
     val userOutputs: List<String>,
     val language: String,
     val version: String,
-    val testPassed: Boolean,
 )
