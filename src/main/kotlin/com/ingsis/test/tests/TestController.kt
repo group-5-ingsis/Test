@@ -38,7 +38,7 @@ class TestController(
       testRepository.findAllBySnippetId(snippetId)
     }
     tests.forEach({ test ->
-      TestRunner.runTest(test)
+      testService.runTest(test.id)
     })
   }
 }
