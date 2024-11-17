@@ -7,16 +7,17 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
 
-@RestController("/service/test")
+@RestController("/test")
 class TestController(
   private val testRepository: TestRepository,
   private val testService: TestService
 ) {
 
   @PostMapping("/{snippetId}")
-  fun createTest(@PathVariable snippetId: String, @RequestBody testDto: TestDto) {
+  fun createTest(@PathVariable snippetId: String, @RequestBody testDto: TestDto): TestDto {
     val test = Test(testDto, snippetId)
     testRepository.save(test)
+    return testDto
   }
 
   @GetMapping("/{snippetId}")
