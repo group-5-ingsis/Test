@@ -7,7 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
 
-@RestController("/test")
+@RestController
 class TestController(
   private val testRepository: TestRepository,
   private val testService: TestService
@@ -25,18 +25,18 @@ class TestController(
     return testRepository.findAllBySnippetId(snippetId)
   }
 
-  @PostMapping("/delete/{testId}")
+  @PostMapping("/{testId}")
   fun deleteTest(@PathVariable testId: String) {
     testRepository.deleteById(testId)
   }
 
-  @PostMapping("/run/{testId}")
+  @PostMapping("/test/{testId}")
   suspend fun runTest(@AuthenticationPrincipal jwt: Jwt, @PathVariable testId: String) {
     val userData = JwtInfoExtractor.createUserData(jwt)
     testService.runTest(userData, testId)
   }
 
-  @PostMapping("/run/{snippetId}/all")
+  @PostMapping("/test/{snippetId}/all")
   suspend fun runAllTestsForSnippet(@AuthenticationPrincipal jwt: Jwt, @PathVariable snippetId: String) {
     val userData = JwtInfoExtractor.createUserData(jwt)
     val tests = withContext(Dispatchers.IO) {
