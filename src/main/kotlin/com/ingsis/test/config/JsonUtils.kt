@@ -1,8 +1,8 @@
-package com.ingsis.test.utils
+package com.ingsis.test.config
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.ingsis.test.languages.runner.TestResult
+import com.ingsis.test.result.TestResult
 import com.ingsis.test.tests.Test
 
 object JsonUtils {

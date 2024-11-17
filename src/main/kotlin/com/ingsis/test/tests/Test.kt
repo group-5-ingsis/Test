@@ -1,6 +1,6 @@
 package com.ingsis.test.tests
 
-import com.ingsis.test.dto.CreateTestDto
+import com.ingsis.test.result.TestStatus
 import jakarta.persistence.Column
 import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
@@ -18,9 +18,6 @@ data class Test(
   @Column(name = "snippetId")
   var snippetId: String,
 
-  @Column(name = "author")
-  var author: String,
-
   @Column(name = "name")
   var name: String,
 
@@ -32,36 +29,16 @@ data class Test(
   @ElementCollection
   var userOutputs: List<String>,
 
-  @Column(name = "language")
-  var language: String,
-
-  @Column(name = "version")
-  var version: String,
-
   @Column(name = "testPassed")
-  var testPassed: Boolean,
+  var testPassed: TestStatus
 ) {
-  constructor() : this(
-    id = UUID.randomUUID().toString(),
-    snippetId = "",
-    author =  "",
-    name = "",
-    userInputs = mutableListOf(),
-    userOutputs = mutableListOf(),
-    language = "",
-    version = "",
-    testPassed = false
-  )
 
-  constructor(createTestDto: CreateTestDto) : this(
+  constructor(testDto: TestDto, snippetId: String) : this(
     id = UUID.randomUUID().toString(),
-    snippetId = createTestDto.snippetId,
-    author = createTestDto.author,
-    name = createTestDto.name,
-    userInputs = createTestDto.userInputs,
-    userOutputs = createTestDto.userOutputs,
-    language = createTestDto.language,
-    version = createTestDto.version,
-    testPassed = false
+    snippetId = snippetId,
+    name = testDto.name,
+    userInputs = testDto.input,
+    userOutputs = testDto.output,
+    testPassed = TestStatus.PENDING
   )
 }

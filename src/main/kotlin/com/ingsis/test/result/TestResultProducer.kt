@@ -1,7 +1,6 @@
-package com.ingsis.test.redis.producer
+package com.ingsis.test.result
 
-import com.ingsis.test.languages.runner.TestResult
-import com.ingsis.test.utils.JsonUtils
+import com.ingsis.test.config.JsonUtils
 import kotlinx.coroutines.reactive.awaitSingle
 import org.austral.ingsis.redis.RedisStreamProducer
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +15,7 @@ class TestResultProducer @Autowired constructor(
 ) : RedisStreamProducer(streamKey, redis) {
 
   suspend fun publishEvent(testResult: TestResult) {
-    val snippetAsJson = JsonUtils.serializeTestResult(testResult)
-    emit(snippetAsJson).awaitSingle()
+    val testResultJson = JsonUtils.serializeTestResult(testResult)
+    emit(testResultJson).awaitSingle()
   }
 }

@@ -1,6 +1,5 @@
 package com.ingsis.test.tests
 
-import com.ingsis.test.dto.CreateTestDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.web.bind.annotation.*
@@ -8,11 +7,12 @@ import org.springframework.web.bind.annotation.*
 @RestController("/service/test")
 class TestController(
   private val testRepository: TestRepository,
-  private val testService: TestService) {
+  private val testService: TestService
+) {
 
-  @PostMapping("/create")
-  fun createTest(@RequestBody createTestDto: CreateTestDto) {
-    val test = Test(createTestDto)
+  @PostMapping("/{snippetId}")
+  fun createTest(@PathVariable snippetId: String, @RequestBody testDto: TestDto) {
+    val test = Test(testDto, snippetId)
     testRepository.save(test)
   }
 
