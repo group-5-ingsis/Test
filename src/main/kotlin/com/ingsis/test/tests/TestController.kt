@@ -1,7 +1,10 @@
 package com.ingsis.test.tests
 
+import com.ingsis.test.config.JwtInfoExtractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
 
 @RestController("/service/test")
@@ -27,18 +30,19 @@ class TestController(
   }
 
   @PostMapping("/run/{testId}")
-  suspend fun runTest(@PathVariable testId: String) {
-    /* TODO: Verify if has permission to run. */
-    testService.runTest(testId)
+  suspend fun runTest(@AuthenticationPrincipal jwt: Jwt, @PathVariable testId: String) {
+    val userData = JwtInfoExtractor.createUserData(jwt)
+    testService.runTest(userData, testId)
   }
 
   @PostMapping("/run/{snippetId}/all")
-  suspend fun runAllTestsForSnippet(@PathVariable snippetId: String) {
+  suspend fun runAllTestsForSnippet(@AuthenticationPrincipal jwt: Jwt, @PathVariable snippetId: String) {
+    val userData = JwtInfoExtractor.createUserData(jwt)
     val tests = withContext(Dispatchers.IO) {
       testRepository.findAllBySnippetId(snippetId)
     }
-    tests.forEach({ test ->
-      testService.runTest(test.id)
-    })
+    tests.forEach { test ->
+      testService.runTest(userData, test.id)
+    }
   }
 }

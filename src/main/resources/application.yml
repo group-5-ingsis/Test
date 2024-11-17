@@ -21,7 +21,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 stream:
-  test-result: ${STREAM_KEY_TEST_RESULT}
+  test-result: "test-result"
 
 server:
   port: ${SERVER_PORT}
