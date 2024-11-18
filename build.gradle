@@ -52,9 +52,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
+
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
     implementation 'org.austral.ingsis:redis-streams-flux:0.1.13'
 
@@ -103,9 +103,6 @@ koverReport {
         filters {
             excludes {
                 packages("config")
-                packages("health")
-                packages("security")
-                classes("com.ingsis.parse.Snippet.kt")
             }
         }
     }

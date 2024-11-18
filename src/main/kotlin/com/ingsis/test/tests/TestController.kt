@@ -1,10 +1,7 @@
 package com.ingsis.test.tests
 
-import com.ingsis.test.config.JwtInfoExtractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -25,25 +22,28 @@ class TestController(
     return testRepository.findAllBySnippetId(snippetId)
   }
 
+  @GetMapping("/test")
+  fun getTest(): String {
+    return "Hello World"
+  }
+
   @PostMapping("/{testId}")
   fun deleteTest(@PathVariable testId: String) {
     testRepository.deleteById(testId)
   }
 
   @PostMapping("/test/{testId}")
-  suspend fun runTest(@AuthenticationPrincipal jwt: Jwt, @PathVariable testId: String) {
-    val userData = JwtInfoExtractor.createUserData(jwt)
-    testService.runTest(userData, testId)
+  suspend fun runTest(@PathVariable testId: String) {
+    testService.runTest(testId)
   }
 
   @PostMapping("/test/{snippetId}/all")
-  suspend fun runAllTestsForSnippet(@AuthenticationPrincipal jwt: Jwt, @PathVariable snippetId: String) {
-    val userData = JwtInfoExtractor.createUserData(jwt)
+  suspend fun runAllTestsForSnippet(@PathVariable snippetId: String) {
     val tests = withContext(Dispatchers.IO) {
       testRepository.findAllBySnippetId(snippetId)
     }
     tests.forEach { test ->
-      testService.runTest(userData, test.id)
+      testService.runTest(test.id)
     }
   }
 }

@@ -1,6 +1,5 @@
 package com.ingsis.test.tests
 
-import com.ingsis.test.config.UserData
 import com.ingsis.test.result.TestResultProducer
 import com.ingsis.test.result.TestRunner
 import com.ingsis.test.result.TestStatus
@@ -14,12 +13,12 @@ class TestService(
   private val testResultProducer: TestResultProducer,
   private val testRunner: TestRunner
 ) {
-  suspend fun runTest(userData: UserData, testId: String) {
+  suspend fun runTest(testId: String) {
     val test = withContext(Dispatchers.IO) {
       testRepository.findById(testId)
     }.orElseThrow { IllegalArgumentException("Test not found with ID: $testId") }
 
-    val result = testRunner.runTest(userData, test)
+    val result = testRunner.runTest(test)
 
     test.testPassed = if (result.result == TestStatus.PASSED) TestStatus.PASSED else TestStatus.FAILED
 
