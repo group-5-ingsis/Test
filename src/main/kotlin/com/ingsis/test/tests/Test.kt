@@ -23,7 +23,7 @@ data class Test(
   @ElementCollection
   var userOutputs: List<String>,
 
-  @Enumerated(EnumType.STRING)
+  @Enumerated(EnumType.ORDINAL)
   var testPassed: TestStatus
 ) {
 

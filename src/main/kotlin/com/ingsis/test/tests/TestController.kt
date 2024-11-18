@@ -27,7 +27,7 @@ class TestController(
     return "Hello World"
   }
 
-  @PostMapping("/{testId}")
+  @DeleteMapping("/{testId}")
   fun deleteTest(@PathVariable testId: String) {
     testRepository.deleteById(testId)
   }
