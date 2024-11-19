@@ -2,6 +2,7 @@ package com.ingsis.test.tests
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -10,15 +11,19 @@ class TestController(
   private val testService: TestService
 ) {
 
+  private val logger = LoggerFactory.getLogger(TestController::class.java)
+
   @PostMapping("/{snippetId}")
   fun createTest(@PathVariable snippetId: String, @RequestBody testDto: TestDto): TestDto {
     val test = Test(testDto, snippetId)
     testRepository.save(test)
+    logger.info("Test created with id: ${test.id}")
     return testDto
   }
 
   @GetMapping("/{snippetId}")
   fun getAllTestsForSnippet(@PathVariable snippetId: String): List<Test> {
+    logger.info("Received request to get all tests for snippet with id: $snippetId")
     return testRepository.findAllBySnippetId(snippetId)
   }
 
@@ -30,6 +35,7 @@ class TestController(
   @DeleteMapping("/{testId}")
   fun deleteTest(@PathVariable testId: String) {
     testRepository.deleteById(testId)
+    logger.info("Removed test with id: $testId")
   }
 
   @PostMapping("/test/{testId}")
