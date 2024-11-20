@@ -1,19 +1,49 @@
 services:
   test:
-    container_name: test
+    container_name: "test"
     build:
       context: .
       dockerfile: Dockerfile
+      secrets:
+        - USERNAME
+        - TOKEN
     volumes:
       - .:/app_src
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    depends_on:
+      - test-postgres-db
     env_file:
       .env
     ports:
       - ${APP_PORT}
 
+
+  test-postgres-db:
+    container_name: "test-db"
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file:
+      .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}
+
+
 volumes:
   postgres_data:
+  blob:
+    external: false
+
+secrets:
+  USERNAME:
+    file: ./username.secret
+  TOKEN:
+    file: ./token.secret
+

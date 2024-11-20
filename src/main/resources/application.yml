@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: "Test Service"
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+stream:
+  test-result: "test-result"
+
+server:
+  port: ${SERVER_PORT}

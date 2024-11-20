@@ -1,5 +1,5 @@
 # Snippet
-Snippet service for Snippet Searcher
+Test service for Snippet Searcher
 
 
 ## Team Members (Group 5):
@@ -13,5 +13,5 @@ Snippet service for Snippet Searcher
 
 
 1. Have Docker installed
-2. Clone Repository and navigate to: `cd ../Snippet`
-3. `docker compose up --build`
+2. Clone Repository and navigate to: `cd ../Test`
+3. `./gradlew bootRun`
