@@ -18,14 +18,21 @@ class TestService(
       testRepository.findById(testId)
     }.orElseThrow { IllegalArgumentException("Test not found with ID: $testId") }
 
-    val result = testRunner.runTest(test)
+    try {
+      val result = testRunner.runTest(test)
 
-    test.testPassed = if (result.result == TestStatus.PASSED) TestStatus.PASSED else TestStatus.FAILED
+      test.testPassed = if (result.result == TestStatus.PASSED) TestStatus.PASSED else TestStatus.FAILED
 
-    withContext(Dispatchers.IO) {
-      testRepository.save(test)
+      withContext(Dispatchers.IO) {
+        testRepository.save(test)
+      }
+
+      testResultProducer.publishEvent(result)
+    } catch (e: Exception) {
+      test.testPassed = TestStatus.FAILED
+      withContext(Dispatchers.IO) {
+        testRepository.save(test)
+      }
     }
-
-    testResultProducer.publishEvent(result)
   }
 }
