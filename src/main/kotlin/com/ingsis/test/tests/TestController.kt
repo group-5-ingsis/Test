@@ -15,11 +15,11 @@ class TestController(
   private val logger = LoggerFactory.getLogger(TestController::class.java)
 
   @PostMapping("/{snippetId}")
-  fun createTest(@PathVariable snippetId: String, @RequestBody testDto: TestDto): ResponseEntity<Test> {
+  fun createTest(@PathVariable snippetId: String, @RequestBody testDto: TestDto): ResponseEntity<TestDto> {
     val test = Test(testDto, snippetId)
     testRepository.save(test)
     logger.info("Test created with id: ${test.id}")
-    return ResponseEntity.ok(test)
+    return ResponseEntity.ok(testDto)
   }
 
   @GetMapping("/{snippetId}")

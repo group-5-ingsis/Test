@@ -13,12 +13,16 @@ class TestRunner(private val assetService: AssetService) {
     val snippet = assetService.getAssetContent(test.snippetAuthor, test.snippetId)
     val inputs = test.userInputs
     val outputs = test.userOutputs
-    inputs.forEach { input ->
-      val executionResult = language.execute(snippet, "1.1", input)
-      if (executionResult != outputs[inputs.indexOf(input)]) {
-        return TestResult(test.id, TestStatus.PASSED)
+
+    if (outputs != null && inputs != null){
+      inputs.forEach { input ->
+        val executionResult = language.execute(snippet, "1.1", input)
+        if (executionResult != outputs[inputs.indexOf(input)]) {
+          return TestResult(test.id, TestStatus.PASSED)
+        }
       }
     }
+
     return TestResult(test.id, TestStatus.FAILED)
   }
 }

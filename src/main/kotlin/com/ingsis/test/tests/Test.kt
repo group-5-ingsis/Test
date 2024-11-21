@@ -18,12 +18,12 @@ data class Test(
   var snippetAuthor: String,
 
   @ElementCollection
-  var userInputs: List<String>,
+  var userInputs: List<String>?,
 
   @ElementCollection
-  var userOutputs: List<String>,
+  var userOutputs: List<String>?,
 
-  @Enumerated(EnumType.STRING)
+  @Enumerated(EnumType.ORDINAL)
   var testPassed: TestStatus
 ) {
 
