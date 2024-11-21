@@ -42,6 +42,7 @@ class TestController(
 
   @PostMapping("/test/{testId}")
   suspend fun runTest(@PathVariable testId: String) {
+    logger.info("Received request to run test with id: $testId")
     testService.runTest(testId)
   }
 
