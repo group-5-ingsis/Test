@@ -18,11 +18,11 @@ class TestRunner(private val assetService: AssetService) {
       inputs.forEach { input ->
         val executionResult = language.execute(snippet, "1.1", input)
         if (executionResult != outputs[inputs.indexOf(input)]) {
-          return TestResult(test.id, TestStatus.PASSED)
+          return TestResult(test.id, TestStatus.FAILED)
         }
       }
     }
 
-    return TestResult(test.id, TestStatus.FAILED)
+    return TestResult(test.id, TestStatus.PASSED)
   }
 }
