@@ -30,7 +30,7 @@ data class Test(
   constructor(testDto: TestDto, snippetId: String) : this(
     id = UUID.randomUUID().toString(),
     snippetId = snippetId,
-    snippetAuthor = "",
+    snippetAuthor = testDto.snippetAuthor,
     name = testDto.name,
     userInputs = testDto.input,
     userOutputs = testDto.output,

@@ -17,9 +17,8 @@ class TestService(
   private val logger = LoggerFactory.getLogger(TestService::class.java)
 
   suspend fun runTest(testId: String) {
-    val test = withContext(Dispatchers.IO) {
-      testRepository.findById(testId)
-    }.orElseThrow { IllegalArgumentException("Test not found with ID: '$testId'") }
+    val testCall = testRepository.findById(testId)
+    val test = testCall.get()
 
     try {
       val result = testRunner.runTest(test)

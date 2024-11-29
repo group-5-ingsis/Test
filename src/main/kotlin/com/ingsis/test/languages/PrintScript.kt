@@ -14,7 +14,7 @@ object PrintScript : Language {
       val asts = Parser(tokens, version, null)
       val interpreter = Interpreter
       val result = interpreter.interpret(asts.next(), version, asts.getEnv(), input)
-      output.append(result)
+      output.append(result.first)
     } catch (e: IOException) {
       System.err.println("I/O Error: ${e.message}")
     } catch (e: Exception) {
